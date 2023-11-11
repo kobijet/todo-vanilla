@@ -1,11 +1,16 @@
 window.addEventListener("load", todoList);
 
+// ToDo
 const todoSection = document.querySelector("section#todo-list");
 const todoUL = document.createElement("ul");
 const todoForm = document.getElementById("todo-form");
 
 const completedCountP = document.createElement("p");
 var completedCount = 0;
+
+// Audio
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext;
 
 function todoList() {
     localStorage.clear();
@@ -27,7 +32,7 @@ function todoList() {
 
     todoSection.appendChild(todoUL);
 
-    // Clear completed on double click
+    // Clear completed todos on double click
     completedCountP.addEventListener("dblclick", (event) => {
         event.preventDefault();
         clearCompleted();
@@ -61,22 +66,22 @@ function getTodos() {
         listItem.appendChild(listText);
 
         // Edit button
-        var deleteButton = document.createElement("button");
-        deleteButton.textContent = "Edit";
-        deleteButton.addEventListener("click", (event) => {
+        var editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", (event) => {
             editTodo(event);
             event.target.parentNode.firstChild.nextSibling.nextSibling.remove(); // remove complete button
             event.target.parentNode.firstChild.nextSibling.remove() // remove edit button
         });
-        listItem.appendChild(deleteButton);
+        listItem.appendChild(editButton);
 
-        // Delete button
-        var deleteButton = document.createElement("button");
-        deleteButton.textContent = "Complete";
-        deleteButton.addEventListener("click", (event) => {
+        // Complete button
+        var completeButton = document.createElement("button");
+        completeButton.textContent = "Complete";
+        completeButton.addEventListener("click", (event) => {
             completeTodo(event);
         });
-        listItem.appendChild(deleteButton);
+        listItem.appendChild(completeButton);
 
         todoUL.appendChild(listItem);
     }
@@ -111,7 +116,7 @@ function createTodo(event) {
 }
 
 // Update item
-// Get item by ID
+// Get item by parent element ID >> ul contains ID not li
 // Save text from list item
 // Replace list item with form for editing
 // On edit save,
@@ -133,6 +138,7 @@ function editTodo(event) {
         saveButton.addEventListener("click", (event) => {
             // Save to do
             event.preventDefault();
+            
             localStorage.setItem(itemId, inputBox.value);
             getTodos();
         });
@@ -141,6 +147,7 @@ function editTodo(event) {
         cancelButton.textContent = "X";
         cancelButton.addEventListener("click", (event) => {
             event.preventDefault();
+
             getTodos();
         })
 
@@ -164,6 +171,14 @@ function completeTodo(event) {
 
 function clearCompleted() {
     console.log("Clearing completed: " + completedTodos);
+
+    // Remove completed todos from localStorage
+    completedTodos.forEach((todo) => {
+        if (localStorage.getItem(todo)) {
+            localStorage.removeItem(todo);
+        }
+    });
+
     completedTodos = [];
     completedCount = completedTodos.length;
     getTodos();

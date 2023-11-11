@@ -8,10 +8,6 @@ const todoForm = document.getElementById("todo-form");
 const completedCountP = document.createElement("p");
 var completedCount = 0;
 
-// Audio
-const AudioContext = window.AudioContext || window.webkitAudioContext;
-const audioContext = new AudioContext;
-
 function todoList() {
     localStorage.clear();
 

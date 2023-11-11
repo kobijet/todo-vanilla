@@ -1,0 +1,55 @@
+body, html {
+    margin: auto;
+    width: 100%;
+}
+
+/* main styles*/
+main {
+    padding: 1em;
+}
+
+/* todo-list styles*/
+section#todo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+section#todo-list ul {
+    list-style-type: none;
+    border: 1px solid lightgrey;
+    width: 75%;
+    padding: 0;
+}
+section#todo-list li {
+    display: flex;
+    height: 3em;
+}
+section#todo-list li p {
+    padding-left: 1em;
+    flex-basis: 70%;
+}
+section#todo-list li button {
+    flex-basis: 15%;
+}
+
+/* edit list item form */
+section#todo-list form {
+    display: flex;
+    width: 100%;
+}
+section#todo-list form input {
+    flex-basis: 70%;
+}
+section#todo-list form button {
+    flex-basis: 15%;
+}
+
+/* todo-form styles*/
+section #todo-form {
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+}
+section #todo-form input:first-of-type {
+    flex-basis: 50%;
+}

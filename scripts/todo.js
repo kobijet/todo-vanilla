@@ -8,7 +8,7 @@ const todoForm = document.getElementById("todo-form");
 const completedCountP = document.createElement("p");
 var completedCount = 0;
 var completedTodos = [];
-var showingCompleted = false;
+var showCompleted = false;
 
 
 function todoList() {
@@ -17,11 +17,10 @@ function todoList() {
         createTodo(event)
     });
 
-    // Demo data button
+    // Clear data button
     const clearButton = document.querySelector("#clear-button");
     clearButton.addEventListener("click", () => {
-        localStorage.clear();
-        getTodos();
+        clearTodos();
     });
 
     // Check whether there is a todo,
@@ -38,14 +37,10 @@ function todoList() {
 
     // Show completed in list
     completedCountP.addEventListener("click", () => {
-        console.log("Toggling showing completed");
-        showingCompleted = !showingCompleted;
-        getTodos();
-    });
-
-    // Clear completed todos on double click
-    completedCountP.addEventListener("dblclick", () => {
-        clearCompleted();
+        if (completedCount > 0) {
+            showCompleted = !showCompleted;
+            getTodos();
+        }
     });
 
     todoSection.appendChild(completedCountP);
@@ -64,13 +59,18 @@ function getTodos() {
         var todoId = "todo" + i;
 
         // If todo is in skip todos array, don't add to list
-        if (!showingCompleted && completedTodos.includes(todoId)) {
+        if (!showCompleted && completedTodos.includes(todoId)) {
             continue;
         }
 
         var listItem = document.createElement("li");
         var storageValue = localStorage.getItem(todoId);
         listItem.setAttribute("id", todoId);
+        
+        // Change color of completed list when showing
+        if (showCompleted && completedTodos.includes(todoId)) {
+            listItem.style.backgroundColor = "hsl(70deg, 100%, 98%)";
+        }
 
         var listText = document.createElement("p");
         listText.textContent = storageValue;
@@ -96,7 +96,7 @@ function getTodos() {
         completeButton.textContent = "Complete";
         completeButton.addEventListener("click", (event) => {
             // Disallow completion if editing, messes with the form
-            if (!editing) {
+            if (!editing && !completedTodos.includes(event.target.parentNode.id)) {
                 completeTodo(event);
             }
         });
@@ -197,17 +197,13 @@ function completeTodo(event) {
     getTodos();
 }
 
-function clearCompleted() {
-    console.log("Clearing completed: " + completedTodos);
-
-    // Remove completed todos from localStorage
-    completedTodos.forEach((todo) => {
-        if (localStorage.getItem(todo)) {
-            localStorage.removeItem(todo);
-        }
-    });
+function clearTodos() {
+    localStorage.clear();
 
     completedTodos = [];
     completedCount = completedTodos.length;
+
+    showCompleted = false;
+
     getTodos();
 }

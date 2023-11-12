@@ -6,13 +6,15 @@ body, html {
 /* main element styles*/
 main, input, button {
     font-family: 'Poppins', sans-serif;
-    font-size: 12px;
+    font-size: 16px;
     color: hsl(0deg, 0%, 20%);
 }
 main {
     padding: 1em;
     margin: auto;
-    width: 75%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
 }
 
 /* todo-list styles*/
@@ -66,6 +68,14 @@ section #todo-form {
 }
 section #todo-form input:first-of-type {
     flex-basis: 50%;
+}
+
+/* Information section */
+section#information {
+    font-size: 0.75em;
+}
+section#information p:last-of-type {
+    text-align: center;
 }
 
 /* classes */

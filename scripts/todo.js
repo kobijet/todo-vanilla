@@ -69,39 +69,42 @@ function getTodos() {
         
         // Change color of completed list when showing
         if (showCompleted && completedTodos.includes(todoId)) {
-            listItem.style.backgroundColor = "hsl(70deg, 100%, 98%)";
+            listItem.style.backgroundColor = "hsl(70deg, 90%, 75%)";
         }
 
         var listText = document.createElement("p");
         listText.textContent = storageValue;
         listItem.appendChild(listText);
 
-        // Edit button
-        var editButton = document.createElement("button");
-        editButton.textContent = "Edit";
-        editButton.addEventListener("click", (event) => {
-            // If not editing, allow item to be edited 
-            // editing set to TRUE at start of editTodo and FALSE when user saves or closes editing
-            if (!editing) {
-                editTodo(event);
-                event.target.parentNode.firstChild.nextSibling.nextSibling.remove(); // remove complete button
-                event.target.parentNode.firstChild.nextSibling.remove() // remove edit button
-            }
-        });
-        editButton.setAttribute("class", "action-button");
-        listItem.appendChild(editButton);
+        // Only show edit button for incomplete todos
+        if (!completedTodos.includes(todoId)) {
+            // Edit button
+            var editButton = document.createElement("button");
+            editButton.textContent = "Edit";
+            editButton.addEventListener("click", (event) => {
+                // If not editing, allow item to be edited 
+                // editing set to TRUE at start of editTodo and FALSE when user saves or closes editing
+                if (!editing) {
+                    editTodo(event);
+                    event.target.parentNode.firstChild.nextSibling.nextSibling.remove(); // remove complete button
+                    event.target.parentNode.firstChild.nextSibling.remove() // remove edit button
+                }
+            });
+            editButton.setAttribute("class", "action-button");
+            listItem.appendChild(editButton);
 
-        // Complete button
-        var completeButton = document.createElement("button");
-        completeButton.textContent = "Complete";
-        completeButton.addEventListener("click", (event) => {
-            // Disallow completion if editing, messes with the form
-            if (!editing && !completedTodos.includes(event.target.parentNode.id)) {
-                completeTodo(event);
-            }
-        });
-        completeButton.setAttribute("class", "action-button");
-        listItem.appendChild(completeButton);
+            // Complete button
+            var completeButton = document.createElement("button");
+            completeButton.textContent = "Complete";
+            completeButton.addEventListener("click", (event) => {
+                // Disallow completion if editing, messes with the form
+                if (!editing && !completedTodos.includes(event.target.parentNode.id)) {
+                    completeTodo(event);
+                }
+            });
+            completeButton.setAttribute("class", "action-button");
+            listItem.appendChild(completeButton);
+        }
 
         todoUL.appendChild(listItem);
     }

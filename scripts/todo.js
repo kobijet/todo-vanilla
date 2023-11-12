@@ -7,13 +7,21 @@ const todoForm = document.getElementById("todo-form");
 
 const completedCountP = document.createElement("p");
 var completedCount = 0;
+var completedTodos = [];
+var showingCompleted = false;
+
 
 function todoList() {
-    localStorage.clear();
-
     // Add event listeners for the form
     todoForm.addEventListener('submit', (event) => {
         createTodo(event)
+    });
+
+    // Demo data button
+    const clearButton = document.querySelector("#clear-button");
+    clearButton.addEventListener("click", () => {
+        localStorage.clear();
+        getTodos();
     });
 
     // Check whether there is a todo,
@@ -28,16 +36,23 @@ function todoList() {
 
     todoSection.appendChild(todoUL);
 
+    // Show completed in list
+    completedCountP.addEventListener("click", () => {
+        console.log("Toggling showing completed");
+        showingCompleted = !showingCompleted;
+        getTodos();
+    });
+
     // Clear completed todos on double click
-    completedCountP.addEventListener("dblclick", (event) => {
-        event.preventDefault();
+    completedCountP.addEventListener("dblclick", () => {
         clearCompleted();
-    })
+    });
 
     todoSection.appendChild(completedCountP);
 }
 
-let completedTodos = [];
+// Bool to keep track of whether or not an entry is being edited
+var editing = false;
 
 // Get todo list from localStorage
 function getTodos() {
@@ -49,7 +64,7 @@ function getTodos() {
         var todoId = "todo" + i;
 
         // If todo is in skip todos array, don't add to list
-        if (completedTodos.includes(todoId)) {
+        if (!showingCompleted && completedTodos.includes(todoId)) {
             continue;
         }
 
@@ -65,18 +80,27 @@ function getTodos() {
         var editButton = document.createElement("button");
         editButton.textContent = "Edit";
         editButton.addEventListener("click", (event) => {
-            editTodo(event);
-            event.target.parentNode.firstChild.nextSibling.nextSibling.remove(); // remove complete button
-            event.target.parentNode.firstChild.nextSibling.remove() // remove edit button
+            // If not editing, allow item to be edited 
+            // editing set to TRUE at start of editTodo and FALSE when user saves or closes editing
+            if (!editing) {
+                editTodo(event);
+                event.target.parentNode.firstChild.nextSibling.nextSibling.remove(); // remove complete button
+                event.target.parentNode.firstChild.nextSibling.remove() // remove edit button
+            }
         });
+        editButton.setAttribute("class", "action-button");
         listItem.appendChild(editButton);
 
         // Complete button
         var completeButton = document.createElement("button");
         completeButton.textContent = "Complete";
         completeButton.addEventListener("click", (event) => {
-            completeTodo(event);
+            // Disallow completion if editing, messes with the form
+            if (!editing) {
+                completeTodo(event);
+            }
         });
+        completeButton.setAttribute("class", "action-button");
         listItem.appendChild(completeButton);
 
         todoUL.appendChild(listItem);
@@ -118,6 +142,7 @@ function createTodo(event) {
 // On edit save,
 // overwrite data of todoId == itemId in localStorage using
 function editTodo(event) {
+    editing = true;
     var itemId = event.target.parentNode.id;
     var itemText = event.target.parentNode.firstChild.textContent;
     if (localStorage.getItem(itemId)) {
@@ -136,16 +161,23 @@ function editTodo(event) {
             event.preventDefault();
             
             localStorage.setItem(itemId, inputBox.value);
+            
+            editing = false;
+            
             getTodos();
         });
+        saveButton.setAttribute("class", "action-button");
 
         var cancelButton = document.createElement("button");
         cancelButton.textContent = "X";
         cancelButton.addEventListener("click", (event) => {
             event.preventDefault();
 
+            editing = false;
+
             getTodos();
-        })
+        });
+        cancelButton.setAttribute("class", "action-button");
 
         inputForm.appendChild(inputBox);
         inputForm.appendChild(saveButton);

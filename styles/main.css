@@ -3,9 +3,16 @@ body, html {
     width: 100%;
 }
 
-/* main styles*/
+/* main element styles*/
+main, input, button {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    color: hsl(0deg, 0%, 20%);
+}
 main {
     padding: 1em;
+    margin: auto;
+    width: 75%;
 }
 
 /* todo-list styles*/
@@ -13,6 +20,10 @@ section#todo-list {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+section#todo-list h2 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 2rem;
 }
 section#todo-list ul {
     list-style-type: none;
@@ -24,12 +35,12 @@ section#todo-list li {
     display: flex;
     height: 3em;
 }
+section#todo-list li:nth-child(even) {
+    background-color: hsl(0, 0%, 93%);
+}
 section#todo-list li p {
     padding-left: 1em;
     flex-basis: 70%;
-}
-section#todo-list li button {
-    flex-basis: 15%;
 }
 
 /* edit list item form */
@@ -38,7 +49,10 @@ section#todo-list form {
     width: 100%;
 }
 section#todo-list form input {
+    background-color: hsl(50deg, 100%, 98%);
     flex-basis: 70%;
+    border: none;
+    padding: 1em;
 }
 section#todo-list form button {
     flex-basis: 15%;
@@ -52,4 +66,16 @@ section #todo-form {
 }
 section #todo-form input:first-of-type {
     flex-basis: 50%;
+}
+
+/* classes */
+.action-button {
+    flex-basis: 15%;
+    border-radius: 0;
+    border: 1px solid hsl(0, 0%, 93%);
+    background-color: white;
+}
+.action-button:hover {
+    background-color: hsl(0, 0%, 95%);
+    transition: background-color 0.5s ease-in-out;
 }

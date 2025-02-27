@@ -4,6 +4,6 @@
  A simple to-do list using vanilla JS, HTML, and CSS.
 
 ## Features
-- Utilizes session storage to keep track of to-do list
+- Utilizes local storage to keep track of to-do list
 - Lightweight and fast
 - Minimal, accessible user interface
